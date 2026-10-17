@@ -1,0 +1,80 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+
+public class a_intersec_bprime {
+    public static void main(String[] args) {
+    	 String inputFileName1 =  "{Followers.txt}";// First file(Followers)
+         String inputFileName2 =  "{Following.txt}";// Second file file(Following)
+         String outputFileName1 = "{Followers_Updated.txt}";// Update the first file
+         String outputFileName2 = "{Following_Updated.txt}"; // Update the second file
+
+         try {
+             BufferedReader reader1 = new BufferedReader(new FileReader(inputFileName1));
+             BufferedReader reader2 = new BufferedReader(new FileReader(inputFileName2));
+             BufferedWriter writer1 = new BufferedWriter(new FileWriter(outputFileName1));
+             BufferedWriter writer2 = new BufferedWriter(new FileWriter(outputFileName2));
+
+             String line;
+             int lineNumber = 1;
+
+             while ((line = reader1.readLine()) != null) {
+                 if (lineNumber % 2 != 0) {
+                     writer1.write(line);
+                     writer1.newLine();
+                 }
+                 lineNumber++;
+             }
+
+             lineNumber = 1; // Remove the even line
+
+             while ((line = reader2.readLine()) != null) {
+                 if (lineNumber % 2 != 0) {
+                     writer2.write(line);
+                     writer2.newLine();
+                 }
+                 lineNumber++;
+             }
+
+             reader1.close();
+             reader2.close();
+             writer1.close();
+             writer2.close();
+
+         } catch (IOException e) {
+             e.printStackTrace();
+         }
+      	Set<String> setA = new HashSet<>();
+        Set<String> setB = new HashSet<>();
+        
+        // Read elements from file Following_Updated.txt into setA
+        try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\User\\OneDrive\\Desktop\\Work\\Following_Updated.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                setA.add(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        // Read elements from file Followers_Updated.txt into setB
+        try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\User\\OneDrive\\Desktop\\Work\\Followers_Updated.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                setB.add(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Calculate the intersection of setA and the complement of setB (A ∩ B')
+        Set<String> complementB = new HashSet<>(setA);
+        complementB.removeAll(setB);
+
+        System.out.println("List of people who didn't follow you back: " + complementB);
+    }
+}
